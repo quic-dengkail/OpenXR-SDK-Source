@@ -193,26 +193,13 @@ getSDKSourceFilenames() {
         specification/Makefile \
         specification/README.md \
         specification/requirements.txt \
-        src/.clang-format \
-        src/.gitignore \
-        src/CMakeLists.txt \
-        src/api_layers \
-        src/cmake \
-        src/common \
-        src/common_config.h.in \
-        src/external/CMakeLists.txt \
-        src/external/android-jni-wrappers \
-        src/external/jnipp \
-        src/external/jsoncpp \
-        src/loader \
-        src/scripts \
-        src/tests \
-        src/version.cmake \
-        src/version.gradle \
+        src/ \
         | grep -v "${COMMON_EXCLUDE_PATTERN}" \
         | grep -v "conformance" \
         | grep -v "template_gen_dispatch" \
+        | grep -v "catch2" \
         | grep -v "function_info" \
+        | grep -v "stb" \
         | grep -v "htmldiff" \
         | grep -v "katex"
 }
@@ -237,17 +224,17 @@ getSDKFilenames() {
         .github/workflows/windows-matrix.yml \
         specification/registry/*.xml \
         include/ \
-        src/.clang-format \
         src/CMakeLists.txt \
-        src/cmake \
-        src/common \
-        src/common_config.h.in \
-        src/external/CMakeLists.txt \
-        src/external/android-jni-wrappers \
-        src/external/jnipp \
-        src/external/jsoncpp \
-        src/loader \
         src/version.cmake \
+        src/common_config.h.in \
+        src/common \
+        src/cmake \
+        src/loader \
+        src/external/CMakeLists.txt \
+        src/external/jsoncpp \
+        src/external/jnipp \
+        src/external/android-jni-wrappers \
+        src/.clang-format \
         | grep -v "${COMMON_EXCLUDE_PATTERN}" \
         | grep -v "gfxwrapper" \
         | grep -v "include/.gitignore" \
@@ -275,14 +262,12 @@ getConformanceFilenames() {
         .azure-pipelines/openxr-cts.yml \
         .github/dependabot.yml \
         .github/scripts \
-        .github/workflows/android-cts-build.yml \
         .github/workflows/android-cts-pr.yml \
         .github/workflows/android-cts-release.yml \
         .github/workflows/check_clang_format_and_codespell.yml \
         .github/workflows/gradle-wrapper-validation.yml \
         .github/workflows/msvc-build-preset.yml \
-        .github/workflows/windows-cts-pr.yml \
-        .github/workflows/windows-cts-release.yml \
+        .github/workflows/windows-matrix.yml \
         changes/README.md \
         changes/template.md \
         changes/.markdownlint.yaml \
@@ -300,18 +285,18 @@ getConformanceFilenames() {
         specification/Makefile \
         specification/README.md \
         specification/requirements.txt \
-        src/.clang-format \
-        src/.gitignore \
-        src/CMakeLists.txt \
+        src/version.gradle \
         src/cmake \
         src/common \
-        src/common_config.h.in \
         src/conformance \
         src/external \
         src/loader \
         src/scripts \
+        src/.clang-format \
+        src/.gitignore \
+        src/CMakeLists.txt \
+        src/common_config.h.in \
         src/version.cmake \
-        src/version.gradle \
         | grep -v "${COMMON_EXCLUDE_PATTERN}" \
         | grep -v "htmldiff" \
         | grep -v "katex"

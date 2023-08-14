@@ -233,12 +233,6 @@ static void ReadDataFilesInSearchPaths(const std::string &override_env_var, cons
             relative_home_path += relative_path;
             CopyIncludedPaths(true, home, relative_home_path, search_path);
         }
-#elif defined(XR_OS_ANDROID)
-        CopyIncludedPaths(true, "/product/etc", relative_path, search_path);
-        CopyIncludedPaths(true, "/odm/etc", relative_path, search_path);
-        CopyIncludedPaths(true, "/oem/etc", relative_path, search_path);
-        CopyIncludedPaths(true, "/vendor/etc", relative_path, search_path);
-        CopyIncludedPaths(true, "/system/etc", relative_path, search_path);
 #else
         (void)relative_path;
 #endif
@@ -453,8 +447,7 @@ static void GetExtensionProperties(const std::vector<ExtensionListing> &extensio
         if (it != props.end()) {
             it->extensionVersion = std::max(it->extensionVersion, ext.extension_version);
         } else {
-            XrExtensionProperties prop{};
-            prop.type = XR_TYPE_EXTENSION_PROPERTIES;
+            XrExtensionProperties prop = {XR_TYPE_EXTENSION_PROPERTIES};
             strncpy(prop.extensionName, ext.name.c_str(), XR_MAX_EXTENSION_NAME_SIZE - 1);
             prop.extensionName[XR_MAX_EXTENSION_NAME_SIZE - 1] = '\0';
             prop.extensionVersion = ext.extension_version;

@@ -18,7 +18,6 @@ pregen/
 generated-includes
 cmake_install.cmake
 cmake_uninstall.cmake
-cmake-build-*
 
 # Marker file for a snapshot build
 SNAPSHOT

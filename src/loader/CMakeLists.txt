@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2023, The Khronos Group Inc.
+# Copyright (c) 2017 The Khronos Group Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -13,6 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# Author:
 #
 
 if(WIN32)
@@ -166,11 +168,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         target_compile_definitions(openxr_loader PRIVATE EXTRASYSCONFDIR="/etc")
     endif()
 
-    set_target_properties(openxr_loader PROPERTIES SOVERSION "${MAJOR}" VERSION "${OPENXR_FULL_VERSION}")
+    set_target_properties(openxr_loader PROPERTIES SOVERSION "${MAJOR}" VERSION "${MAJOR}.${MINOR}.${PATCH}")
 
     add_custom_target(
         libopenxr_loader.so.${MAJOR}.${MINOR} ALL
-        COMMAND ${CMAKE_COMMAND} -E create_symlink libopenxr_loader.so.${OPENXR_FULL_VERSION}
+        COMMAND ${CMAKE_COMMAND} -E create_symlink libopenxr_loader.so.${MAJOR}.${MINOR}.${PATCH}
                 libopenxr_loader.so.${MAJOR}.${MINOR}
     )
 elseif(WIN32)
@@ -273,11 +275,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
     # Make build depend on the version script/export map
     target_sources(openxr_loader PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/openxr-loader.map)
     # Add the linker flag.
-    if(APPLE)
-        set_target_properties(openxr_loader PROPERTIES LINK_FLAGS "-Wl,-exported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/openxr-loader.expsym")
-    else()
-        set_target_properties(openxr_loader PROPERTIES LINK_FLAGS "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/openxr-loader.map")
-    endif()
+    set_target_properties(openxr_loader PROPERTIES LINK_FLAGS "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/openxr-loader.map")
     # For GCC version 7.1 or greater, we need to disable the implicit fallthrough warning since
     # there's no consistent way to satisfy all compilers until they all accept the C++17 standard
     if(CMAKE_COMPILER_IS_GNUCC AND NOT (CMAKE_CXX_COMPILER_VERSION LESS 7.1))
@@ -286,10 +284,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
 endif()
 
 add_library(headers INTERFACE)
-target_include_directories(headers INTERFACE
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_include_directories(headers INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 # We will never actually install here, but it's easier to set something than block all install code.
 if(ANDROID AND NOT INSTALL_TO_ARCHITECTURE_PREFIXES)
@@ -309,10 +304,6 @@ export(
     FILE ${CMAKE_CURRENT_BINARY_DIR}/OpenXRTargets.cmake
     NAMESPACE OpenXR::
 )
-
-# Create aliases so that it can be used the same whether vendored as source or found with CMake.
-add_library(OpenXR::openxr_loader ALIAS openxr_loader)
-add_library(OpenXR::headers ALIAS headers)
 
 if(WIN32 AND NOT INSTALL_TO_ARCHITECTURE_PREFIXES)
     set(TARGET_DESTINATION cmake)
@@ -338,7 +329,7 @@ configure_package_config_file(
 )
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/OpenXRConfigVersion.cmake
-    VERSION "${OPENXR_FULL_VERSION}"
+    VERSION "${MAJOR}.${MINOR}.${PATCH}"
     COMPATIBILITY SameMajorVersion
 )
 install(
@@ -401,5 +392,5 @@ elseif(ANDROID AND INSTALL_TO_ARCHITECTURE_PREFIXES)
 
     # This gets used directly by build-aar.sh
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/openxr_loader_for_android.pom
-        ${CMAKE_CURRENT_BINARY_DIR}/openxr_loader_for_android-${OPENXR_FULL_VERSION}${OPENXR_ANDROID_VERSION_SUFFIX}.pom)
+        ${CMAKE_CURRENT_BINARY_DIR}/openxr_loader_for_android-${MAJOR}.${MINOR}.${PATCH}${OPENXR_ANDROID_VERSION_SUFFIX}.pom)
 endif()

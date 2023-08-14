@@ -103,10 +103,6 @@ typedef unsigned __int64 uint64_t;
 #endif
 #endif
 
-#if !defined(XR_CPP_NULLPTR_SUPPORTED)
-#define XR_CPP_NULLPTR_SUPPORTED 0
-#endif  // !defined(XR_CPP_NULLPTR_SUPPORTED)
-
 #ifdef __cplusplus
 }
 #endif

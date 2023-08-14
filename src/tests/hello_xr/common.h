@@ -7,7 +7,6 @@
 #include <string>
 #include <locale>
 #include <algorithm>
-#include <memory>
 #include <stdarg.h>
 #include <stddef.h>
 
@@ -92,8 +91,7 @@ inline std::string Fmt(const char* fmt, ...) {
 
 // The equivalent of C++17 std::size. A helper to get the dimension for an array.
 template <typename T, size_t Size>
-constexpr size_t ArraySize(const T (&unused)[Size]) noexcept {
-    (void)unused;
+constexpr size_t ArraySize(const T (&/*unused*/)[Size]) noexcept {
     return Size;
 }
 

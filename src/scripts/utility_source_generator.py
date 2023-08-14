@@ -50,7 +50,6 @@ class UtilitySourceOutputGenerator(AutomaticSourceOutputGenerator):
         if self.genOpts.filename == 'xr_generated_dispatch_table.h':
             preamble += '#pragma once\n'
         elif self.genOpts.filename == 'xr_generated_dispatch_table.c':
-            preamble += '#include <time.h>\n'
             preamble += '#include "xr_generated_dispatch_table.h"\n'
 
         preamble += '#include "xr_dependencies.h"\n'

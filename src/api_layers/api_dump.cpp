@@ -595,9 +595,9 @@ extern "C" {
 
 // Function used to negotiate an interface betewen the loader and an API layer.  Each library exposing one or
 // more API layers needs to expose at least this function.
-LAYER_EXPORT XRAPI_ATTR XrResult XRAPI_CALL xrNegotiateLoaderApiLayerInterface(const XrNegotiateLoaderInfo *loaderInfo,
-                                                                               const char * /*apiLayerName*/,
-                                                                               XrNegotiateApiLayerRequest *apiLayerRequest) {
+XrResult LAYER_EXPORT XRAPI_CALL xrNegotiateLoaderApiLayerInterface(const XrNegotiateLoaderInfo *loaderInfo,
+                                                                    const char * /*apiLayerName*/,
+                                                                    XrNegotiateApiLayerRequest *apiLayerRequest) {
     if (nullptr == loaderInfo || nullptr == apiLayerRequest || loaderInfo->structType != XR_LOADER_INTERFACE_STRUCT_LOADER_INFO ||
         loaderInfo->structVersion != XR_LOADER_INFO_STRUCT_VERSION || loaderInfo->structSize != sizeof(XrNegotiateLoaderInfo) ||
         apiLayerRequest->structType != XR_LOADER_INTERFACE_STRUCT_API_LAYER_REQUEST ||
@@ -611,8 +611,8 @@ LAYER_EXPORT XRAPI_ATTR XrResult XRAPI_CALL xrNegotiateLoaderApiLayerInterface(c
 
     apiLayerRequest->layerInterfaceVersion = XR_CURRENT_LOADER_API_LAYER_VERSION;
     apiLayerRequest->layerApiVersion = XR_CURRENT_API_VERSION;
-    apiLayerRequest->getInstanceProcAddr = ApiDumpLayerXrGetInstanceProcAddr;
-    apiLayerRequest->createApiLayerInstance = ApiDumpLayerXrCreateApiLayerInstance;
+    apiLayerRequest->getInstanceProcAddr = reinterpret_cast<PFN_xrGetInstanceProcAddr>(ApiDumpLayerXrGetInstanceProcAddr);
+    apiLayerRequest->createApiLayerInstance = reinterpret_cast<PFN_xrCreateApiLayerInstance>(ApiDumpLayerXrCreateApiLayerInstance);
 
     return XR_SUCCESS;
 }
